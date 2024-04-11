@@ -21,7 +21,7 @@ public final class BabyGronk extends JavaPlugin implements Listener {
         if (event.getEntityType() == EntityType.ZOMBIE)
         {
             Zombie zombie = (Zombie) event.getEntity();
-            if (zombie.isBaby())
+            if (!zombie.isAdult())
             {
                 zombie.setCustomName("Baby Gronk");
                 zombie.setCustomNameVisible(true);
