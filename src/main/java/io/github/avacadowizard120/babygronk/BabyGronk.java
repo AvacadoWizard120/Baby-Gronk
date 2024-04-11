@@ -13,6 +13,7 @@ public final class BabyGronk extends JavaPlugin implements Listener {
     public void onEnable()
     {
         getServer().getPluginManager().registerEvents(this, this);
+        getLogger().info("Baby Gronk has been enabled!");
     }
 
     @EventHandler
@@ -31,6 +32,6 @@ public final class BabyGronk extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        getLogger().info("Baby Gronk has been disabled!");
     }
 }
