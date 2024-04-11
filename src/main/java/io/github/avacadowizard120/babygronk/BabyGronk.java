@@ -56,15 +56,10 @@ public final class BabyGronk extends JavaPlugin implements Listener {
         Player player = event.getEntity();
         if (player.getKiller() != null && player.getKiller().getType() == EntityType.ZOMBIE) {
             Zombie zombie = (Zombie) player.getKiller();
-            if (!zombie.isAdult() && zombie.getCustomName() != null && zombie.getCustomName().equals("Baby Gronk")) {
+            if (!zombie.isAdult() && zombie.getName().equals("Baby Gronk")) {
                 String victimName = player.getName();
                 String randomDeathMessage = getRandomDeathMessage(victimName);
-
-                // Set the custom death message
                 event.setDeathMessage(randomDeathMessage);
-
-                // Broadcast the custom death message to all players on the server
-                Bukkit.getServer().broadcastMessage(randomDeathMessage);
             }
         }
     }
