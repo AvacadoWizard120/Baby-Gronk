@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public final class BabyGronk extends JavaPlugin implements Listener {
@@ -23,11 +24,11 @@ public final class BabyGronk extends JavaPlugin implements Listener {
             "Baby Gronk cheated on Livvy Dunne with {player}."
     );
 
+    private final Random random = new Random();
+
     @Override
-    public void onEnable()
-    {
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
-        {
+    public void onEnable() {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getServer().getPluginManager().registerEvents(this, this);
             getLogger().info("PlaceholderAPI found!");
             getLogger().info("Baby Gronk has been enabled!");
@@ -38,13 +39,10 @@ public final class BabyGronk extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onEntitySpawn(EntitySpawnEvent event)
-    {
-        if (event.getEntityType() == EntityType.ZOMBIE)
-        {
+    public void onEntitySpawn(EntitySpawnEvent event) {
+        if (event.getEntityType() == EntityType.ZOMBIE) {
             Zombie zombie = (Zombie) event.getEntity();
-            if (!zombie.isAdult())
-            {
+            if (!zombie.isAdult()) {
                 zombie.setCustomName("Baby Gronk");
                 zombie.setCustomNameVisible(true);
             }
@@ -53,23 +51,26 @@ public final class BabyGronk extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
+        getLogger().info("onPlayerDeath has been called");
         Player player = event.getEntity();
+        getLogger().info("Player killed by: " + Objects.requireNonNull(player.getKiller()).getType());
         if (player.getKiller() != null && player.getKiller().getType() == EntityType.ZOMBIE) {
             Zombie zombie = (Zombie) player.getKiller();
-            if (!zombie.isAdult() && zombie.getName().equals("Baby Gronk")) {
+            if (!zombie.isAdult()) {
                 String victimName = player.getName();
                 String randomDeathMessage = getRandomDeathMessage(victimName);
                 event.setDeathMessage(randomDeathMessage);
+            } else {
+                getLogger().warning("Is Adult!");
             }
+        } else {
+            getLogger().warning("Not Zombie!");
         }
     }
 
-    private String getRandomDeathMessage(String playerName)
-    {
-        Random random = new Random();
+    private String getRandomDeathMessage(String playerName) {
         String message = deathMessages.get(random.nextInt(deathMessages.size()));
-        message = message.replace("{player}", playerName);
-        return message;
+        return message.replace("{player}", playerName);
     }
 
     @Override
