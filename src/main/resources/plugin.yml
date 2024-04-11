@@ -1,0 +1,8 @@
+name: Baby Gronk
+version: '${version}'
+main: io.github.avacadowizard120.babygronk.BabyGronk
+api-version: '1.20'
+load: STARTUP
+authors: [Eden Urias]
+description: Makes every baby zombie... Baby Gronk.
+website: https://youtube.com/@ConfusingFool93
