@@ -1,4 +1,4 @@
-name: Baby Gronk
+name: BabyGronk
 version: '${version}'
 main: io.github.avacadowizard120.babygronk.BabyGronk
 api-version: '1.20'
