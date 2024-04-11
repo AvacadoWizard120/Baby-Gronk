@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
@@ -24,6 +25,10 @@ public final class BabyGronk extends JavaPlugin implements Listener {
             "Baby Gronk just tested out his new killer rizz on {player}.",
             "Baby Gronk cheated on Livvy Dunne with {player}."
     );
+
+    private boolean isBabyGronk = false;
+
+    private String playerKilledByGronk;
 
     private final Random random = new Random();
 
@@ -56,20 +61,25 @@ public final class BabyGronk extends JavaPlugin implements Listener {
         if (entity instanceof Player player) {
             if (player.getLastDamageCause() instanceof EntityDamageByEntityEvent damageEvent) {
                 if (damageEvent.getDamager() instanceof Zombie zombie) {
-                    getLogger().info("Killer is Zombie");
                     if (!zombie.isAdult() && zombie.getCustomName() != null && zombie.getCustomName().equals("Baby Gronk")) {
-                        getLogger().info("Killer is Baby Gronk");
-                        String victimName = player.getName();
-                        // String randomDeathMessage = getRandomDeathMessage(victimName);
-                        // event.setDeathMessage(randomDeathMessage);
-                        getLogger().info("Player " + victimName + " was killed by Baby Gronk");
-                    } else {
-                        getLogger().warning("Killer is NOT Baby Gronk");
+                        isBabyGronk = true;
+                        playerKilledByGronk = player.getName();
                     }
-                } else {
-                    getLogger().warning("Killer is NOT Zombie");
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event)
+    {
+        Player player = event.getEntity();
+
+        if (isBabyGronk && player.getName().equals(playerKilledByGronk))
+        {
+            String victimName = player.getName();
+            String randomDeathMessage = getRandomDeathMessage(victimName);
+            event.setDeathMessage(randomDeathMessage);
         }
     }
 
