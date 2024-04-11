@@ -6,3 +6,4 @@ load: POSTWORLD
 authors: [Eden Urias]
 description: Makes every baby zombie... Baby Gronk.
 website: https://youtube.com/@ConfusingFool93
+depend: [PlaceholderAPI]
