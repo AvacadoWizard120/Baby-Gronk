@@ -8,8 +8,8 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
@@ -51,41 +51,28 @@ public final class BabyGronk extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        Entity killer = player.getKiller();
-        if (killer != null) {
-            getLogger().info("Killer Type: " + killer.getType());
-            if (killer.getType() == EntityType.ZOMBIE) {
-                Zombie zombie = (Zombie) killer;
-                if (!zombie.isAdult()) {
-                    String victimName = player.getName();
-                    String randomDeathMessage = getRandomDeathMessage(victimName);
-                    event.setDeathMessage(randomDeathMessage);
+    public void onEntityDeath(EntityDeathEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof Player player) {
+            if (player.getLastDamageCause() instanceof EntityDamageByEntityEvent damageEvent) {
+                if (damageEvent.getDamager() instanceof Zombie zombie) {
+                    getLogger().info("Killer is Zombie");
+                    if (!zombie.isAdult() && zombie.getCustomName() != null && zombie.getCustomName().equals("Baby Gronk")) {
+                        getLogger().info("Killer is Baby Gronk");
+                        String victimName = player.getName();
+                        // String randomDeathMessage = getRandomDeathMessage(victimName);
+                        // event.setDeathMessage(randomDeathMessage);
+                        getLogger().info("Player " + victimName + " was killed by Baby Gronk");
+                    } else {
+                        getLogger().warning("Killer is NOT Baby Gronk");
+                    }
                 } else {
-                    getLogger().warning("The killer was an adult zombie!");
+                    getLogger().warning("Killer is NOT Zombie");
                 }
-            } else {
-                getLogger().warning("The killer was not a zombie!");
             }
-        } else {
-            getLogger().warning("There was no killer associated with the death!");
         }
     }
 
-    @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player && event.getDamager() instanceof Zombie zombie) {
-            if (!zombie.isAdult()) {
-                Player player = (Player) event.getEntity();
-                String victimName = player.getName();
-                String randomDeathMessage = getRandomDeathMessage(victimName);
-                player.sendMessage(randomDeathMessage);
-                // Optionally, you can also set the death message for other players or log it
-                getLogger().info("Player " + victimName + " was killed by a baby zombie");
-            }
-        }
-    }
 
 
 
