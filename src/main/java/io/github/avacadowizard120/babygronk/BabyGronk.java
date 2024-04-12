@@ -27,7 +27,8 @@ public final class BabyGronk extends JavaPlugin implements Listener {
             "Soooo {player}'s getting rizzed up by Baby Gronk...",
             "Soooo Baby Gronk did not ask {player} for consent...",
             "Soooo Baby Gronk just put it in {player}...",
-            "Livvy Dunne wasn't enough for Baby Gronk... {player} was..."
+            "Livvy Dunne wasn't enough for Baby Gronk... {player} was...",
+            "{player} got caught lacking by Baby Gronk"
     );
 
     private final List<String> diegoDeathMessages = Arrays.asList(
